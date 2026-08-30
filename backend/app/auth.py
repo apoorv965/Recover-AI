@@ -18,9 +18,11 @@ the initial Google token exchange — every protected route re-verifies our
 own JWT on every request via `get_current_user`.
 """
 import os
-from datetime import datetime, timedelta
-from typing import Optional
+from pathlib import Path
+from dotenv import load_dotenv
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer

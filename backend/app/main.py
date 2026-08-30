@@ -7,13 +7,16 @@ FastAPI application entrypoint.
 Architecture: AI recommends -> Policy Engine validates -> Action Engine
 executes -> Audit System records. See app/services/ for each component.
 """
-from dotenv import load_dotenv
+import os
+from pathlib import Path
+from dotenv import load_dotenv # type: ignore
 
-load_dotenv()  # reads backend/.env if present, before anything reads os.environ
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, Depends # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from sqlalchemy.orm import Session # type: ignore
 
 from app.auth import get_current_user
 from app.database import Base, engine, SessionLocal, get_db
