@@ -6,7 +6,8 @@ import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './index.css'
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
+const GOOGLE_CLIENT_ID =
+  '966155426799-t9vuma4efus5f27gev63ol8kpitj2d2s.apps.googleusercontent.com'
 
 if (!GOOGLE_CLIENT_ID) {
   // eslint-disable-next-line no-console
