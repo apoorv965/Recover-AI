@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0e17;
+  color: #e5e9f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #324058;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card {
+  @apply bg-ink-900 border border-white/5 rounded-xl shadow-card;
+}
+
+.table-shell {
+  @apply w-full text-sm text-left;
+}
+
+.table-shell th {
+  @apply text-ink-500 font-medium text-xs uppercase tracking-wide px-4 py-3 border-b border-white/5;
+}
+
+.table-shell td {
+  @apply px-4 py-3 border-b border-white/5 text-slate-100;
+}
+
+.table-shell tr:hover td {
+  @apply bg-white/[0.02];
+}
