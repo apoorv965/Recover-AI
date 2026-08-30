@@ -1,251 +1,592 @@
-# RecoverAI — Autonomous Revenue Recovery Agent
+# 🚀 RecoverAI — Autonomous Revenue Recovery Agent
 
-RecoverAI detects revenue at risk from **failed payments** and **abandoned checkouts**,
-uses an AI agent to recommend a recovery strategy, validates every recommendation
-against a deterministic **Policy Engine**, and only then executes an action —
-logging every step to an immutable-style **Audit Trail**. An admin dashboard
-tracks recovered revenue and recovery rate in real time.
+<p align="center">
 
-> Built as a hackathon MVP: functional end-to-end, cleanly modular, and demoable in 3–5 minutes.
+### 🤖 AI-Powered Revenue Recovery & Customer Retention Platform
+
+**💳 Detect Lost Revenue • 🧠 Understand the Cause • 🛡️ Recover Safely • 📈 Grow Revenue**
+
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/🌐_LIVE_DEMO-RecoverAI-00C853?style=for-the-badge)](https://recover-ai-frontend.onrender.com)
+
+</p>
 
 ---
 
-## 1. Architecture
+## 🌐 🚀 LIVE DEMO
 
-```
-                 ┌──────────────┐
-  Events   ───►  │  Detection   │  (failed payment / abandoned checkout → RecoveryCase)
- (webhook/API)    └──────┬───────┘
+### 🔥 Experience RecoverAI Live
+
+<p align="center">
+
+## 👉 [🌐 OPEN RECOVERAI — LIVE WEBSITE](https://recover-ai-frontend.onrender.com)
+
+</p>
+
+### ⚡ Backend API
+
+👉 https://recover-ai-backend-sv1y.onrender.com/
+
+### 🎨 Frontend Live
+
+👉 https://recover-ai-frontend.onrender.com
+
+---
+
+## 💰 What is RecoverAI?
+
+**RecoverAI** detects revenue at risk from:
+
+💳 **Failed Payments**
+🛒 **Abandoned Checkouts**
+
+It uses an **AI Agent 🤖** to recommend a recovery strategy, validates every recommendation against a deterministic **Policy Engine 🛡️**, and **only then executes an authorized action ⚡**.
+
+Every step is logged to an **immutable-style Audit Trail 📜**, while the admin dashboard tracks:
+
+💵 **Recovered Revenue**
+📈 **Recovery Rate**
+⚡ **Real-Time Recovery Activity**
+
+---
+
+# 🧠 AI → 🛡️ POLICY → ⚡ ACTION → 📜 AUDIT
+
+```text
+                 💳 FAILED PAYMENT
                          │
                          ▼
-                 ┌──────────────┐
-                 │  AI Agent    │  → failure_reason, recoverability_score (0-100),
-                 │ (recommends) │     recommended_strategy, plain-English explanation
-                 └──────┬───────┘
-                         │ recommendation (never executes anything)
-                         ▼
-                 ┌──────────────┐
-                 │Policy Engine │  → deterministic rules: max 3 attempts, cooldown,
-                 │ (validates)  │     stop after success, respect opt-out/STOP
-                 └──────┬───────┘
-                         │ allow / block + reason
-                         ▼
-                 ┌──────────────┐
-                 │Action Engine │  → executes the authorized strategy only
-                 │ (executes)   │     (retry, reminder, recovery link, or no-op)
-                 └──────┬───────┘
+                🛒 ABANDONED CHECKOUT
                          │
                          ▼
-                 ┌──────────────┐
-                 │ Audit System │  → immutable-style log: timestamp, case, AI rec,
-                 │  (records)   │     policy decision, explanation, execution result
-                 └──────────────┘
+                  🔍 DETECTION
+                         │
+                         ▼
+                    🤖 AI AGENT
+                         │
+              "What should we do?"
+                         │
+                         ▼
+                 🛡️ POLICY ENGINE
+                         │
+              "Are we allowed to?"
+                         │
+                  ┌──────┴──────┐
+                  │             │
+                  ▼             ▼
+               ✅ ALLOW      ❌ BLOCK
+                  │             │
+                  ▼             ▼
+              ⚡ ACTION      📜 AUDIT
+                  │
+                  ▼
+               💰 RECOVERY
+                  │
+                  ▼
+               📊 ANALYTICS
 ```
 
-**Why this separation matters:** the AI never touches money or sends messages
-directly. It only produces a *recommendation object*. The Policy Engine is a
-plain, deterministic rules module — no ML, no ambiguity — that is the sole
-authority allowed to approve or block an action. This makes the system safe,
-explainable, and auditable, which is exactly what you want next to real payment
-flows.
+---
 
-### Tech stack
+## 🔥 THE CORE IDEA
 
-| Layer      | Technology                                   |
-|------------|-----------------------------------------------|
-| Frontend   | React 18 + Vite + Tailwind CSS + Recharts     |
-| Backend    | Python 3.10+ + FastAPI + SQLAlchemy           |
-| Database   | SQLite (MVP) — swappable to PostgreSQL via env var, zero code changes |
-| Simulation | Built-in synthetic transaction generator (120+ events) |
+> ### 🤖 AI recommends.
+>
+> ### 🛡️ Policy validates.
+>
+> ### ⚡ Action executes.
+>
+> ### 📜 Audit records.
+>
+> ### 💰 Revenue gets recovered.
 
-### Backend module layout
+### 🚨 The AI is NEVER the final authority.
 
+The AI only creates a **recommendation**.
+
+The deterministic **Policy Engine** decides whether that recommendation is allowed to execute.
+
+This separation makes RecoverAI:
+
+**🛡️ Safe • 🔍 Explainable • 📜 Auditable • ⚡ Automated**
+
+---
+
+# 🏗️ ARCHITECTURE
+
+```text
+Events
+  │
+  │ 💳 Failed Payment
+  │ 🛒 Abandoned Checkout
+  ▼
+┌──────────────────────────────┐
+│       🔍 DETECTION           │
+│                              │
+│     Creates RecoveryCase     │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│        🤖 AI AGENT           │
+│                              │
+│ • Failure Reason             │
+│ • Recoverability Score 0–100 │
+│ • Recommended Strategy       │
+│ • Plain-English Explanation  │
+└──────────────┬───────────────┘
+               │
+               │ 💡 Recommendation
+               ▼
+┌──────────────────────────────┐
+│     🛡️ POLICY ENGINE         │
+│                              │
+│ • Max 3 Attempts             │
+│ • Cooldown                   │
+│ • Stop After Success         │
+│ • Respect STOP / Opt-out     │
+│ • Reject Unknown Strategies  │
+└──────────────┬───────────────┘
+               │
+          ┌────┴────┐
+          ▼         ▼
+       ✅ ALLOW   ❌ BLOCK
+          │         │
+          ▼         ▼
+┌────────────────┐ 📜 AUDIT
+│ ⚡ ACTION       │
+│    ENGINE       │
+│                │
+│ • Retry        │
+│ • Reminder     │
+│ • Recovery Link│
+│ • No-op        │
+└───────┬────────┘
+        │
+        ▼
+   📜 AUDIT SYSTEM
 ```
+
+---
+
+# 🛡️ POLICY ENGINE
+
+### 🔒 Deterministic Safety Layer
+
+RecoverAI uses hard-coded rules to make sure AI recommendations stay within safe business boundaries.
+
+| 🛡️ Rule                | ⚙️ Policy                                     |
+| ----------------------- | --------------------------------------------- |
+| 🔁 **Maximum Attempts** | Maximum **3 recovery attempts**               |
+| ⏳ **Cooldown**          | **60 minutes** between contact attempts       |
+| 🛑 **After Success**    | Stop all further recovery actions             |
+| 🚫 **STOP / Opt-Out**   | Permanent — customer is never contacted again |
+| 🔐 **Unknown Strategy** | Automatically rejected                        |
+
+> 📜 **Every ALLOW or BLOCK decision is recorded with a plain-English reason.**
+
+---
+
+# 📜 IMMUTABLE-STYLE AUDIT TRAIL
+
+Every important step is recorded:
+
+```text
+🕐 Timestamp
+      ↓
+🆔 Recovery Case
+      ↓
+🤖 AI Recommendation
+      ↓
+🛡️ Policy Decision
+      ↓
+💬 Explanation
+      ↓
+⚡ Execution Result
+```
+
+So a human reviewer can always understand:
+
+> 🔍 **"Why did the system do this?"**
+
+or
+
+> 🛑 **"Why didn't the system do this?"**
+
+---
+
+# 📊 REAL-TIME ADMIN DASHBOARD
+
+RecoverAI tracks:
+
+### 💰 Revenue at Risk
+
+Potential revenue affected by failed payments and abandoned checkouts.
+
+### 💵 Revenue Recovered
+
+Revenue successfully recovered through the pipeline.
+
+### 📈 Recovery Rate
+
+Measures recovery performance in real time.
+
+### 📊 Strategy Performance
+
+Shows which recovery strategies perform best.
+
+### 🚦 Case Status
+
+```text
+🟢 ACTIVE
+🟡 IN PROGRESS
+🔵 RECOVERED
+🔴 STOPPED
+```
+
+---
+
+# 🧰 TECH STACK
+
+| Layer             | Technology                                    |
+| ----------------- | --------------------------------------------- |
+| 🎨 **Frontend**   | React 18 + Vite + Tailwind CSS + Recharts     |
+| ⚙️ **Backend**    | Python 3.10+ + FastAPI + SQLAlchemy           |
+| 🗄️ **Database**  | SQLite — PostgreSQL Ready                     |
+| 🧪 **Simulation** | Synthetic Transaction Generator — 120+ events |
+
+---
+
+# 📂 BACKEND MODULES
+
+```text
 backend/app/
-├── main.py                # FastAPI app, CORS, startup/auto-seed
-├── database.py            # DB engine/session (SQLite now, Postgres-ready)
-├── models.py               # SQLAlchemy models: RawEvent, RecoveryCase, AuditLog
-├── schemas.py              # Pydantic request/response contracts
-├── simulation.py           # Synthetic transaction batch generator
-├── routers/
-│   ├── events.py           # POST /events/payment, /events/checkout
-│   ├── cases.py             # GET/POST /recovery-cases...
-│   ├── analytics.py         # GET /analytics/dashboard
-│   └── audit.py             # GET /audit-logs
-└── services/
-    ├── ai_agent.py          # Recommends: failure_reason, score, strategy
-    ├── policy_engine.py     # Validates: the ONLY component that can approve an action
-    ├── action_engine.py     # Executes: performs the authorized action (simulated)
-    └── audit_service.py     # Append-only audit log writer
+│
+├── 🚀 main.py
+│
+├── 🗄️ database.py
+│
+├── 📦 models.py
+│
+├── 📋 schemas.py
+│
+├── 🧪 simulation.py
+│
+├── 🌐 routers/
+│   ├── events.py
+│   ├── cases.py
+│   ├── analytics.py
+│   └── audit.py
+│
+└── 🧠 services/
+    ├── ai_agent.py
+    ├── policy_engine.py
+    ├── action_engine.py
+    └── audit_service.py
 ```
 
 ---
 
-## 2. Setup & running locally
+# 🚀 SETUP & RUN LOCALLY
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
+## 📋 Prerequisites
 
-### 0. Google OAuth setup (one-time)
+* 🐍 Python 3.10+
+* 🟢 Node.js 18+
 
-The app is gated behind Google Sign-In. Create a Google OAuth 2.0 **Web
-application** client:
+---
 
-1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials).
-2. Create an OAuth client ID of type **Web application**.
-3. Add authorized JavaScript origins for wherever the frontend runs, e.g.
-   `http://localhost:5173`.
-4. Copy the generated **Client ID** — you'll need it in both `backend/.env`
-   and `frontend/.env` below. No client secret is needed (only the ID token
-   flow is used).
+## 🔐 Google OAuth Setup
 
-### Backend
+The app is gated behind **Google Sign-In 🔑**.
+
+Create a Google OAuth 2.0 **Web Application** client and configure the required authorized JavaScript origins.
+
+The generated **Client ID** is required in:
+
+```text
+backend/.env
+frontend/.env
+```
+
+---
+
+## ⚙️ Backend
 
 ```bash
 cd backend
+
 python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Windows
+venv\Scripts\activate
+
 pip install -r requirements.txt
-cp .env.example .env            # then fill in GOOGLE_CLIENT_ID and JWT_SECRET
+
+cp .env.example .env
+
 uvicorn app.main:app --reload --port 8000
 ```
 
-On first startup the app automatically creates the SQLite database
-(`recoverai.db`) and seeds it with **120 synthetic transactions** (a mix of
-successful payments, temporary/permanent failures, and abandoned checkouts),
-most of which are pre-processed through the full pipeline so the dashboard
-shows meaningful numbers immediately.
+### 📊 Auto-Seed
 
-API docs (interactive Swagger UI) are available at: **http://localhost:8000/docs**
+On first startup:
 
-### Frontend
+```text
+🗄️ SQLite Database Created
+        ↓
+🧪 120 Synthetic Transactions
+        ↓
+💳 Successful + Failed Payments
+        ↓
+🛒 Abandoned Checkouts
+        ↓
+🤖 Recovery Pipeline
+        ↓
+📊 Dashboard Ready
+```
+
+### 📚 API Documentation
+
+👉 `http://localhost:8000/docs`
+
+---
+
+# 🎨 FRONTEND
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Visit **http://localhost:5173**. The frontend talks to the backend at
-`http://localhost:8000` by default (override with a `.env` file setting
-`VITE_API_URL`).
+### 🌐 Local Application
 
-### Switching to PostgreSQL later
+👉 `http://localhost:5173`
 
-```bash
-export DATABASE_URL="postgresql+psycopg2://user:password@localhost:5432/recoverai"
-```
-No application code changes are required — `app/database.py` reads this
-environment variable directly, and `pip install psycopg2-binary` is the only
-extra dependency needed.
+### 🔗 Backend Configuration
 
----
-
-## 3. API reference
-
-| Method | Endpoint                                    | Description |
-|--------|----------------------------------------------|--------------|
-| POST   | `/events/payment`                            | Ingest a payment event (`status: succeeded\|failed`). Failed payments open a RecoveryCase. |
-| POST   | `/events/checkout`                           | Ingest a checkout-abandonment event. Opens a RecoveryCase. |
-| GET    | `/recovery-cases`                            | List cases. Filter with `?status=` and `?event_type=`. |
-| GET    | `/recovery-cases/{id}`                       | Full case detail, including the audit-log timeline. |
-| POST   | `/recovery-cases/{id}/process`               | Run one AI → Policy → Action → Audit cycle on the case. |
-| POST   | `/recovery-cases/{id}/simulate-success`      | Demo helper: mark the case as recovered (payment succeeded). |
-| POST   | `/recovery-cases/{id}/opt-out`               | Mark the customer as opted out (STOP); blocks all future contact. |
-| GET    | `/analytics/dashboard`                       | Aggregate metrics: revenue at risk/recovered, recovery rate, strategy performance. |
-| GET    | `/audit-logs`                                | Full audit trail. Filter with `?case_id=`. |
-| POST   | `/simulation/generate?count=60`              | Generate another batch of synthetic transactions. |
-
-### Example: submitting a failed payment event
-
-```bash
-curl -X POST http://localhost:8000/events/payment \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_name": "Jordan Lee",
-    "customer_email": "jordan@example.com",
-    "amount": 149.99,
-    "status": "failed",
-    "failure_code": "insufficient_funds"
-  }'
+```env
+VITE_API_URL=http://localhost:8000
 ```
 
-This immediately opens a `RecoveryCase`. Calling
-`POST /recovery-cases/{id}/process` then runs it through the AI agent and
-Policy Engine, returning the updated case plus the new audit-log entry.
+---
+
+# 🐘 POSTGRESQL READY
+
+RecoverAI can be switched from SQLite to PostgreSQL using:
+
+```bash
+DATABASE_URL="postgresql+psycopg2://user:password@localhost:5432/recoverai"
+```
+
+No application code changes are required.
 
 ---
 
-## 4. Policy Engine rules (hard-coded, deterministic)
+# 🌐 API REFERENCE
 
-1. **Maximum 3 recovery attempts** per case.
-2. **Cooldown of 60 minutes** required between contact attempts.
-3. **Immediate stop** once a case is marked recovered — no further action is ever permitted.
-4. **STOP / opt-out is permanent** — a customer who opts out is never contacted again, regardless of what the AI recommends.
-5. **Unrecognized strategies are rejected** as a defense-in-depth check against malformed AI output.
-
-Every decision — allowed or blocked — is written to the audit trail with a
-plain-English reason, so a human reviewer can always answer "why did (or
-didn't) the system do that?"
-
----
-
-## 5. Demo workflow (3–5 minutes)
-
-1. **Dashboard** — open the app. It's pre-seeded with ~120 transactions, so
-   you immediately see Revenue at Risk, Revenue Recovered, Recovery Rate, and
-   active/stopped case counts, plus a chart of at-risk vs. recovered revenue
-   over time and a strategy-performance table.
-2. **Recovery Cases** — filter to `status=open` to find untouched cases. Click
-   one to open its detail page.
-3. **Case Details** — click **"Run Recovery Pipeline."** Watch the AI classify
-   the failure reason, assign a recoverability score, and recommend a
-   strategy; the Policy Engine's decision and the Action Engine's simulated
-   execution appear immediately in the timeline below.
-4. Click **"Simulate Success"** on an in-progress case to show revenue being
-   recovered — watch the Dashboard's Recovery Rate move.
-5. Click **"Opt Out (STOP)"** on another case, then try **"Run Recovery
-   Pipeline"** again — the Policy Engine blocks it and logs why, demonstrating
-   that the AI cannot override a hard policy rule.
-6. **Audit Trail** — show the full, timestamped log of every AI
-   recommendation and policy decision system-wide.
-7. **Analytics** — show attempts vs. recoveries by strategy and the case
-   status breakdown to round out the story: which strategies actually work.
-8. **Market Intelligence** — a second, independent dataset explorer (5,000
-   Indian companies) living in the same app, useful to show breadth of the
-   team's data-viz work without leaving the demo.
+| Method  | Endpoint                                | Description                  |
+| ------- | --------------------------------------- | ---------------------------- |
+| 🟢 POST | `/events/payment`                       | Ingest payment event         |
+| 🟢 POST | `/events/checkout`                      | Ingest abandoned checkout    |
+| 🔵 GET  | `/recovery-cases`                       | List recovery cases          |
+| 🔵 GET  | `/recovery-cases/{id}`                  | Full case + audit timeline   |
+| 🟢 POST | `/recovery-cases/{id}/process`          | AI → Policy → Action → Audit |
+| 🟢 POST | `/recovery-cases/{id}/simulate-success` | Simulate successful recovery |
+| 🟢 POST | `/recovery-cases/{id}/opt-out`          | Customer STOP / opt-out      |
+| 🔵 GET  | `/analytics/dashboard`                  | Revenue & recovery analytics |
+| 🔵 GET  | `/audit-logs`                           | Complete audit trail         |
+| 🟢 POST | `/simulation/generate?count=60`         | Generate synthetic events    |
 
 ---
 
-## 6. Market Intelligence page
+# 🎬 3–5 MINUTE DEMO
 
-`frontend/src/pages/MarketIntelligence.jsx` is a self-contained analytics view
-unrelated to the recovery workflow. It ships with a static dataset embedded at
-`frontend/src/data/indianCompanies.json` (5,000 rows: company name, industry,
-city, state, founded year, status, employees, FY2024-25 and FY2025-26 revenue,
-growth %, profit, margin %, debt-to-equity, export share, and market cap — all
-in ₹ Crore). Everything is computed client-side with Recharts, matching the
-same dark fintech design system as the rest of the app:
+```text
+        🚀 OPEN LIVE DEMO
+                │
+                ▼
+        📊 DASHBOARD
+                │
+                ▼
+       📁 RECOVERY CASE
+                │
+                ▼
+      ⚡ RUN RECOVERY PIPELINE
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+     🤖 AI             🛡️ POLICY
+        │                │
+        └───────┬────────┘
+                ▼
+          ⚡ ACTION
+                │
+                ▼
+          📜 AUDIT
+                │
+                ▼
+        💰 SIMULATE SUCCESS
+                │
+                ▼
+          📈 RECOVERY RATE ↑
+```
 
-- 4 KPI cards (companies, total revenue, total profit, average growth) that
-  recompute live as filters change
-- Charts: revenue by industry, revenue by state, top 12 companies by revenue,
-  Listed vs. Private revenue split, revenue-growth distribution, and a
-  profit-margin-vs-growth bubble scatter sized by market cap
-- Filters for industry, state, and listing status, plus a live search box
-- A sortable, paginated company table with a "Export filtered CSV" button
+### 🛑 Safety Demo
 
-No backend involvement is required for this page — it's pure frontend, so it
-works even if the FastAPI server isn't running.
+```text
+🚫 OPT OUT (STOP)
+        ↓
+🤖 AI recommends action
+        ↓
+🛡️ POLICY ENGINE
+        ↓
+❌ BLOCKED
+        ↓
+📜 REASON LOGGED
+```
+
+> 🔥 **This demonstrates that AI cannot override a hard policy rule.**
 
 ---
 
-## 7. Design notes / what was intentionally left out
+# 🇮🇳 MARKET INTELLIGENCE
 
-This is a focused MVP, not a payments platform. Notably out of scope by
-design: real payment gateway integration, real email/SMS delivery, user
-authentication, and multi-tenant merchant accounts. The Action Engine module
-is structured so any of these could be plugged in later (e.g. swap the
-simulated Stripe retry call for a real one) without touching the AI Agent,
-Policy Engine, or Audit System.
+RecoverAI also includes a separate analytics explorer containing:
+
+## 🏢 5,000 Indian Companies
+
+The dataset includes:
+
+🏢 Company Name
+🏭 Industry
+📍 City
+🗺️ State
+📅 Founded Year
+👥 Employees
+💰 FY2024–25 Revenue
+💰 FY2025–26 Revenue
+📈 Growth %
+💵 Profit
+📊 Margin %
+⚖️ Debt-to-Equity
+🌍 Export Share
+📈 Market Cap
+
+All financial values are represented in **₹ Crore**.
+
+---
+
+# 📈 MARKET ANALYTICS
+
+### 📊 KPI CARDS
+
+💼 Companies
+💰 Total Revenue
+💵 Total Profit
+📈 Average Growth
+
+### 📉 CHARTS
+
+🏭 Revenue by Industry
+🗺️ Revenue by State
+🏆 Top 12 Companies by Revenue
+🏛️ Listed vs Private Revenue
+📈 Revenue Growth Distribution
+🫧 Profit Margin vs Growth
+
+### 🔎 FILTERS
+
+🏭 Industry
+📍 State
+🏛️ Listing Status
+🔍 Live Search
+
+### 📥 EXPORT
+
+**Export Filtered CSV**
+
+---
+
+# 🎯 DEMO STORY
+
+```text
+💳 PAYMENT FAILS
+       ↓
+🔍 RECOVERAI DETECTS IT
+       ↓
+🤖 AI UNDERSTANDS WHY
+       ↓
+💡 AI RECOMMENDS A STRATEGY
+       ↓
+🛡️ POLICY ENGINE CHECKS IT
+       ↓
+      ┌───────┐
+      │       │
+      ▼       ▼
+    ✅ YES   ❌ NO
+      │       │
+      ▼       ▼
+   ⚡ ACT   🚫 BLOCK
+      │       │
+      └───┬───┘
+          ▼
+      📜 AUDIT
+          │
+          ▼
+      📊 ANALYTICS
+          │
+          ▼
+      💰 RECOVERED
+```
+
+---
+
+# 🚧 DESIGN SCOPE
+
+RecoverAI is a focused **MVP**, not a complete payments platform.
+
+Currently out of scope by design:
+
+❌ Real Payment Gateway Integration
+❌ Real Email/SMS Delivery
+❌ User Authentication
+❌ Multi-Tenant Merchant Accounts
+
+The **Action Engine** is structured so these capabilities can be plugged in later without changing the:
+
+🤖 **AI Agent**
+🛡️ **Policy Engine**
+📜 **Audit System**
+
+---
+
+# 🏆 BUILT FOR HACKATHON. DESIGNED FOR SCALE.
+
+### 💡 RecoverAI turns:
+
+**Failed Payments + Abandoned Checkouts**
+
+into:
+
+**🤖 AI Recommendations + 🛡️ Safe Automation + 📜 Full Auditability + 💰 Recovered Revenue**
+
+---
+
+<p align="center">
+
+# 🚀 RECOVERAI
+
+### 💰 Don't just detect lost revenue. Recover it intelligently.
+
+**🤖 Think → 🛡️ Verify → ⚡ Act → 📜 Audit → 📈 Recover**
+
+<br/>
+
+### 🌐 [🔥 LIVE DEMO — OPEN RECOVERAI](https://recover-ai-frontend.onrender.com)
+
+</p>
