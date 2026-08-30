@@ -19,14 +19,13 @@ own JWT on every request via `get_current_user`.
 """
 import os
 from pathlib import Path
+from datetime import datetime, timedelta
 from typing import Optional
 
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
-
-from datetime import datetime, timedelta
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -35,6 +34,8 @@ from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from sqlalchemy.orm import Session
 
+from app.database import get_db
+from app.models import User
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-me")
 JWT_ALGORITHM = "HS256"
